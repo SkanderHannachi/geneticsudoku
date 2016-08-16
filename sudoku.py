@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 #-----------------Constantes
 NOMBRE_INDIVIDU_NXT = 1000
+NOMBRE_GENERATION = 50
 #-----------------Classes
 class Indiv() : 
     def __init__(self,mat,metrique,lib) : 
@@ -128,12 +129,10 @@ def Metrique_matrice(ls) :
     """Permet le calcul de la métrique 3 X 3. """
     l=[]
     M = np.asarray(ls)
-    a = 0
-    b = 3
+    a,b = 0,3
     Sp = 0
     for i in range(3) :
-        c = 0
-        d = 3
+        c,d = 0,3
         for i in range(3) : 
             l.append(M[a:b,c:d])
             c += 3
@@ -158,28 +157,23 @@ def bilan(ls) :
         R.append(indiv)
     R.sort()
     return R[:100]
-#---------------------------programme principal    
+#---------------Programme principal    
 def main() : 
     inp = imprt_input()        
-    L = population_gen(inp) ##ls est une solution unique
+    L = population_gen(inp) 
     N = NextGen_generateur(L)
     F = bilan(N)
     j = 1
     Y =[]
-    while j<50 : 
-        nm = []
-        print("Generation N° : "+str(j))
+    while j < NOMBRE_GENERATION :
+        Nm = []
+        print("A la génération N° : " + str(j)+" on obtient une métrique de : " +str(F[0].metrique))
         for i in range(100) : 
-            nm.append(F[i].mat) 
-        N = NextGen_generateur(nm)
+            Nm.append(F[i].mat)
+        N = NextGen_generateur(Nm)
         F = bilan(N)
-        print("COMPUTING ")
+        Y.append(F[0].metrique)
         j += 1
-        Y.append(F[0].metrique) 
-        if F[0].metrique == 0 : 
-            print("SOLUTION TROUVÉE")
-            print("~~~~~~~~~~~~~~~~")
-            print(F[0])
     plt.plot(range(len(Y)),Y)
     plt.show()
 
