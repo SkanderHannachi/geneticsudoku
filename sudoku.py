@@ -1,3 +1,4 @@
+ 
 """
 Algorithme génétique qui résoud une grille de sudoku.
 """ 
@@ -48,9 +49,9 @@ def fill_mat(vierge) :
         for j in range(9) : 
             if lss[i][j] == 0 : 
                 k = rdm.randint(1,9)
-                lss[i][j]= k + 10
+                lss[i][j] = k
             else : 
-                lss[i][j] = vierge[i][j]
+                lss[i][j] = vierge[i][j] + 10
     return lss            
 
 def population_gen(ls) :
@@ -80,8 +81,8 @@ def mutation(ls) :
         selec = rdm.randint(0,80)
         col = selec%9 - 1
         lgn = selec//9 - 1
-        if ls[lgn][col] > 10 :
-            ls[lgn][col] = RNG_diff(ls[lgn][col],11,19)
+        if ls[lgn][col] < 10 :
+            ls[lgn][col] = RNG_diff(ls[lgn][col],1,9)
             val=False
         else : 
             val=True
@@ -168,6 +169,8 @@ def main() :
     while j < NOMBRE_GENERATION :
         Nm = []
         print("A la génération N° : " + str(j)+" on obtient une métrique de : " +str(F[0].metrique))
+        M = np.asarray(F[0].mat)
+        print(M)
         for i in range(100) : 
             Nm.append(F[i].mat)
         N = NextGen_generateur(Nm)
