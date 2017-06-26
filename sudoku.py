@@ -56,25 +56,26 @@ def population_gen(ls) :
 
 def couplage(ls_2,ls_1) : 
 	"""fait le couplage de deux solutions.(ie choisit un point de coupure et fait fusionner deux solutions choisies au hasard)""" 
-	ls_porchaine_gen = ls_2
 	coupure_indice = rdm.randint(0,80) 
 	#print("Le point de coupure est : " + str(coupure_indice))
 	col = coupure_indice%9 - 1
 	lgn = coupure_indice//9 
 	for i in range(0,lgn) : 
 		for j in range(0,col) : 
-			ls_porchaine_gen[i][j] = ls_1[i][j]
-	return ls_porchaine_gen
+			ls_2[i][j] = ls_1[i][j]
+	return ls_2
 
 def mutation(ls) : 
-	"""fait la mutation d'une solution donnée.(ie choisit un emplacement d'une façon aléatoire et remplace la valeur)"""
+	"""fait la mutation d'une solution donnée.(ie choisit un emplacement d'une façon aléatoire et remplace la valeur)
+	amelioration : rajouter une contrainte : si l'element à chercher existe deja dans une ligne/colone/matrice3X3 refaire
+	"""
 	val=True
 	while(val) : 
 		selec = rdm.randint(0,80)
-		col = selec%9 - 1
-		lgn = selec//9 - 1
+		col = selec%9 
+		lgn = selec//9
 		if ls[lgn][col] < 10 :
-			ls[lgn][col] = RNG_diff(ls[lgn][col],1,9)
+			ls[lgn][col] = RNG_diff(ls[lgn][col], 1, 9)
 			val=False
 		else : 
 			val=True
@@ -85,7 +86,7 @@ def NextGen_generateur(ls) :
 	nxt_gen=[]
 	for i in range(int(NOMBRE_INDIVIDU_NXT*0.3)) : 
 		sol1_index = rdm.randint(0,99)
-		sol2_index = rdm.randint(0,99)
+		sol2_index = RNG_diff(sol1_index,0 ,99)
 		nxt_gen.append(couplage(ls[sol1_index],ls[sol2_index]))
 	for i in range(int(NOMBRE_INDIVIDU_NXT*0.7)) :
 		sol1_index = rdm.randint(0,99)
@@ -160,7 +161,7 @@ def main() :
 		Nm = []
 		print("A la génération N° : " + str(j)+"/"+str(NOMBRE_GENERATION)+"  on obtient une métrique de : " +str(F[0].metrique))
 		M = np.asarray(F[0].mat)
-		if F[0].metrique == 0 : 
+		if F[0].metrique <= 2 : 
 			print(M)
 		for i in range(100) : 
 			Nm.append(F[i].mat)
