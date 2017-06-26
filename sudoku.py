@@ -7,10 +7,9 @@ NOMBRE_INDIVIDU_NXT = 1000
 NOMBRE_GENERATION = 1000
 #-----------------Classes
 class Indiv() : 
-	def __init__(self,mat,metrique,lib) : 
+	def __init__(self, mat, metrique) : 
 		self.mat = mat
 		self.metrique = metrique
-		self.lib = lib
 	def __gt__(self,autre) : 
 		return self.metrique > autre.metrique
 	def __repr__(self) : 
@@ -136,8 +135,8 @@ def Metrique_matrice(ls) :
 		m = l[i]
 		for i in range(1,9) : 
 			x = np.count_nonzero(m == i)
-		if x ==0 : 
-			x = 1
+			if x ==0 : 
+				x = 1
 			Sp += (x-1)**2
 	return Sp
 
@@ -146,7 +145,7 @@ def bilan(ls) :
 	R =[]
 	fitness = lambda solution :  Metrique_colone(solution)+Metrique_ligne(solution)+Metrique_matrice(solution)
 	for i in range(len(ls)):
-		indiv = Indiv(ls[i],fitness(ls[i]),i)
+		indiv = Indiv(ls[i],fitness(ls[i]))
 		R.append(indiv)
 	R.sort()
 	return R[:100]
@@ -161,13 +160,14 @@ def main() :
 		Nm = []
 		print("A la génération N° : " + str(j)+"/"+str(NOMBRE_GENERATION)+"  on obtient une métrique de : " +str(F[0].metrique))
 		M = np.asarray(F[0].mat)
-		print(M)
+		if F[0].metrique == 0 : 
+			print(M)
 		for i in range(100) : 
 			Nm.append(F[i].mat)
 		N = NextGen_generateur(Nm)
 		F = bilan(N)
 		Y.append(F[0].metrique)
-	plt.plot(range(len(Y)),Y)
+	plt.scatter(range(len(Y)),Y)
 	plt.show()
 
 if __name__ == '__main__':
